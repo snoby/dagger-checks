@@ -55,8 +55,8 @@ class Checks:
             .with_workdir("/src")
             .with_exec(["pip", "install", "--quiet", "trufflehog"])
         )
-        # Scan the tree (no git required uses --no-update).
-        return await container.with_exec(["trufflehog", "filesystem", "--no-update", "."]).stdout()
+        # Scan the tree directory in-place (truffleHog 2.x CLI; no git needed).
+        return await container.with_exec(["trufflehog", "--regex", "--entropy=False", "."]).stdout()
 
     @function
     async def test(self, source: dagger.Directory) -> str:
