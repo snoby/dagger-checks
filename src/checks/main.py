@@ -30,6 +30,8 @@ class Checks:
         return await (
             dag.container()
             .from_(LINT_IMAGE)
+            .with_exec(["apt-get", "update"])
+            .with_exec(["apt-get", "install", "-y", "--no-install-recommends", "git"])
             .with_mounted_directory("/src", source)
             .with_workdir("/src")
             .with_exec(["pip", "install", "--quiet", "ruff"])
@@ -47,6 +49,8 @@ class Checks:
         container = (
             dag.container()
             .from_(LINT_IMAGE)
+            .with_exec(["apt-get", "update"])
+            .with_exec(["apt-get", "install", "-y", "--no-install-recommends", "git"])
             .with_mounted_directory("/src", source)
             .with_workdir("/src")
             .with_exec(["pip", "install", "--quiet", "trufflehog"])
