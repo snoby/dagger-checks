@@ -9,7 +9,7 @@ Run from a workflow against the always-on shared engine, e.g.:
 """
 
 import dagger
-from dagger import function, object_type
+from dagger import dag, function, object_type
 
 # Base image with linting/static-analysis tooling. Kept on a stable tag so
 # layer caching stays warm.
