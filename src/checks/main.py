@@ -84,3 +84,54 @@ class Checks:
             .with_directory("/app", source)
             .with_default_args(["python", "app.py"])
         )
+
+    @function
+    async def static_analyzer(self, source: dagger.Directory) -> str:
+        """Run a static analyzer over the source.
+
+        STUB: placeholder for a real static-analysis gate (e.g. bandit /
+        semgrep / sonarqube). Returns a no-op report and exits 0; wire the
+        real tool + ruleset here and fail the step on findings.
+        """
+        return await (
+            dag.container()
+            .from_(LINT_IMAGE)
+            .with_mounted_directory("/src", source)
+            .with_workdir("/src")
+            .with_exec(["sh", "-c", "echo '[static-analyzer] STUB: no analyzer configured'; exit 0"])
+            .stdout()
+        )
+
+    @function
+    async def private_key_check(self, source: dagger.Directory) -> str:
+        """Check the source for exposed private keys / seed material.
+
+        STUB: placeholder for a private-key / wallet-seed detector (e.g.
+        gitleaks 'privatekey' rule, yara, or a wallet-privkey scanner).
+        Exits 0 regardless pending the real detector.
+        """
+        return await (
+            dag.container()
+            .from_(LINT_IMAGE)
+            .with_mounted_directory("/src", source)
+            .with_workdir("/src")
+            .with_exec(["sh", "-c", "echo '[private-key-check] STUB: no private-key detector configured'; exit 0"])
+            .stdout()
+        )
+
+    @function
+    async def format(self, source: dagger.Directory) -> str:
+        """Format-check the source.
+
+        STUB: placeholder for a formatter/diff gate (e.g. black --check /
+        ruff format --check / clang-format). Exits 0 pending a real formatter;
+        when wired, return non-zero with a diff if formatting is required.
+        """
+        return await (
+            dag.container()
+            .from_(LINT_IMAGE)
+            .with_mounted_directory("/src", source)
+            .with_workdir("/src")
+            .with_exec(["sh", "-c", "echo '[format] STUB: no formatter configured'; exit 0"])
+            .stdout()
+        )
